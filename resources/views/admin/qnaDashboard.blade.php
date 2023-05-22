@@ -18,17 +18,14 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Add Q & A</h5>
 
-                    <button id="addAnswer" class="ml-5">Add Answer</button>
-
-
-
+                    <button id="addAnswer" class="ml-5 btn btn-info">Add Answer</button>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form id="addQna">
-
+            @csrf
             <div class="modal-body">
                 <div class="row">
                 <div class="col">
@@ -50,6 +47,7 @@
 
 <script>
     $(document).ready(function(){
+       
         //form submition
         $("#addQna").submit(function(e){
             e.preventDefault();
@@ -62,6 +60,40 @@
 
             }
             else{
+                var checkIsCorrect = false;
+
+                for (let i = 0; i < $(".is_correct").length; i++){
+                    if( $(".is_correct:eq("+i+")").prop('checked') == true){
+                        checkIsCorrect = true;
+                        $(".is_correct:eq("+i+")").val($(".is_correct:eq("+i+")").next().find('input').val());
+                    }
+                }
+
+                if(checkIsCorrect){
+                    var formData = $(this).serialize();
+
+                    $.ajax({
+                        url:"{{ route('addQna') }}",
+                        type:"POST",
+                        data:formData,
+                        success:function(data){
+                            console.log(data);
+                            if(data.success == true){
+                                location.reload();
+                            }
+                            else{
+                                alert(data.msg);
+                            }
+                        }
+                    });
+
+                }
+                else{
+                    $(".error").text("Please select any one correct answer!")
+                setTimeout(function(){
+                    $(".error").text("");
+                },2000);
+                }
 
             }
         });

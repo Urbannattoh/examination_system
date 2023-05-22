@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
+use App\Models\Question;
+use App\Models\Answer;
 
 class AdminController extends Controller
 {
@@ -126,5 +128,31 @@ public function qnaDashboard(){
     return view('admin.qnaDashboard');
 
 }
+
+//add question and answer
+    public function addQna(Request $request)
+    {
+        try{
+            $questionId=Question::insertGetId([
+            'question' => $request->question
+            ]);
+            foreach($request->answers as $answer){
+                $is_correct = 0;
+                if($request->is_correct == $answer){
+                    $is_correct = 1;
+                }
+                Answer::insert([
+                    'questions_id' =>$questionId,
+                    'answer' =>$answer,
+                    'is_correct' =>$is_correct
+                ]);
+            }
+            return response()->json(['success'=>true,'msg'=>'Exam deleted Succeffully']);
+        }
+            catch(\Exception $e){
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        };
+        
+    }
 
 }

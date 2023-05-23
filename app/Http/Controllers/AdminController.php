@@ -125,7 +125,9 @@ public function deleteExam(Request $request){
 
 //question and answer
 public function qnaDashboard(){
-    return view('admin.qnaDashboard');
+
+    $questions = Question::with('answers')->get();
+    return view('admin.qnaDashboard',compact('questions'));
 
 }
 

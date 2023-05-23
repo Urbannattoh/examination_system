@@ -15,6 +15,8 @@ use App\Http\Controllers\AdminController;
 |
 */
 
+/* test for pushing the changes to the github*/
+
 Route::get('/', function () {
     return view('welcome');
 });

@@ -81,7 +81,8 @@
                     <br><br>
                     <input type="time" name="time" class="w-100" required>
                     <br><br>
-                    <input type="number" min="1" name="attempt" placeholder="Enter Exam Attempt Time" class="w-100" required>
+                    <input type="number" min="1" name="attempt" placeholder="Enter Exam Attempt Time" class="w-100"
+                        required>
                     <br><br>
                 </div>
                 <div class="modal-footer">
@@ -127,7 +128,8 @@
                     <br><br>
                     <input type="time" name="time" id="time" class="w-100" required>
                     <br><br>
-                    <input type="number" min="1" id="attempt" name="attempt" placeholder="Edit Exam Attempt Time" class="w-100" required>
+                    <input type="number" min="1" id="attempt" name="attempt" placeholder="Edit Exam Attempt Time"
+                        class="w-100" required>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -140,7 +142,7 @@
 
 <!-- Delete Exam Modal -->
 
-<div class="modal fade" id="deleteExamModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="deleteExamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

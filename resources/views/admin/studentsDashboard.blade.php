@@ -50,8 +50,8 @@
                             <input type="text" class="w-100" name="name" placeholder="Enter Student Name" required>
                         </div>
                     </div>
-
-                    <div class="row">
+                        
+                    <div class="row mt-3">
                         <div class="col">
                             <input type="email" class="w-100" name="email" placeholder="Enter Student Email" required>
                         </div>
@@ -68,5 +68,32 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $("#addStudent").submit(function(e){
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('addStudent') }}",
+                type:"POST",
+                data:formData,
+                success:function(data){
+
+                    if(data.success == true){
+                        location.reload();
+
+                    }
+                    else{
+                        alert(data.msg);
+                    }
+
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

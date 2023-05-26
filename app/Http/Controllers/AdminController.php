@@ -8,6 +8,10 @@ use App\Models\Exam;
 use App\Models\User;
 use App\Models\Question;
 use App\Models\Answer;
+use Illuminate\Support\Facades\Hash;
+use Mail;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 
 class AdminController extends Controller
 {
@@ -233,4 +237,42 @@ public function qnaDashboard(){
         $students = User::where('is_admin',0)->get();
         return view('admin.studentsDashboard',compact('students'));
     }
+
+    //add student
+    public function addStudent(Request $request)
+    {
+        try{
+            
+            $password  = Str::random(8);
+
+            User::insert([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($password)
+            ]);
+
+             $url = URL::to('/');
+
+             $data['url'] = $url;
+
+             $data['name'] = $request->name;
+
+             $data['email'] = $request->email;
+
+             $data['password'] = $password;
+
+             $data['title'] = "Student Registration on OES";
+
+             Mail::send('registrationMail',['data'=>$data],function($message) use ($data){
+                $message->to($data['email'])->subject($data['title']);
+
+             });
+             return response()->json(['success'=>true,'msg'=>'Student Added Successfully']);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
 }

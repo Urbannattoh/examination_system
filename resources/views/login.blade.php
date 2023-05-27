@@ -23,5 +23,6 @@
     <input type="submit" value="Login">
 
 </form>
+<a href="/forget-password">Forget Password</a>
 
 @endsection

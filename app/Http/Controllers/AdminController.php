@@ -307,4 +307,18 @@ public function qnaDashboard(){
         }
     }     
 
+    //delete student
+    public function deleteStudent(Request $request){
+        try
+        {
+            User::where('id',$request->id)->delete();
+            return response()->json(['success'=>true,'msg'=>'Student deleted Successfully']);
+
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
 }

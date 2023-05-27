@@ -274,5 +274,37 @@ public function qnaDashboard(){
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
     }
+    //update and edit the students biodata
+    public function editStudent(Request $request)
+    {
+        try{
+            
+            $user = User::find($request->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+
+             $url = URL::to('/');
+
+             $data['url'] = $url;
+
+             $data['name'] = $request->name;
+
+             $data['email'] = $request->email;
+
+            
+             $data['title'] = " Updated Student Profile on the system";
+
+             Mail::send('updateProfileMail',['data'=>$data],function($message) use ($data){
+                $message->to($data['email'])->subject($data['title']);
+
+             });
+             return response()->json(['success'=>true,'msg'=>'Student updated Successfully']);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }     
 
 }

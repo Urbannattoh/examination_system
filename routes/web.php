@@ -65,6 +65,7 @@ Route::group(['middleware'=>['web','checkAdmin']], function(){
     //Students routing 
     Route::get('/admin/students',[AdminController::class,'studentsDashboard']);
     Route::post('/add-student',[AdminController::class,'addStudent'])->name('addStudent');
+    Route::post('/edit-student',[AdminController::class,'editStudent'])->name('editStudent');
 
 });
 

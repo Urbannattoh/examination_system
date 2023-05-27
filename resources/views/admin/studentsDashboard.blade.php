@@ -13,6 +13,7 @@
         <th>#</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Edit</th>
     </thead>
     <tbody>
         @if(count($students) > 0)
@@ -21,6 +22,11 @@
             <td>{{ $student->id }}</td>
             <td>{{ $student->name }}</td>
             <td>{{ $student->email }}</td>
+            <td>
+                <button type="button" data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-email="{{ $student->email }}" class="btn btn-info editButton" data-toggle="modal" data-target="#editStudentModal">
+                    Edit
+                </button>
+            </td>
         </tr>
         @endforeach
         @else
@@ -69,6 +75,48 @@
     </div>
 </div>
 
+
+<!-- Update student Modal -->
+<div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editStudent">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <input type="hidden" name="id" id="id">
+                            <input type="text" class="w-100" name="name" id="name" placeholder="Enter Student Name" required>
+                        </div>
+                    </div>
+                        
+                    <div class="row mt-3">
+                        <div class="col">
+                            <input type="email" class="w-100" name="email" id="email" placeholder="Enter Student Email" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary updateButton">Update Student</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     $(document).ready(function(){
         $("#addStudent").submit(function(e){
@@ -93,6 +141,38 @@
                 }
             });
         });
+
+        //student edit button click and show values
+        $(".editButton").click(function(){
+             $("#id").val( $(this).attr('data-id') );
+             $("#name").val( $(this).attr('data-name') );
+             $("#email").val( $(this).attr('data-email') );
+        });
+        //edit student..
+        $("#editStudent").submit(function(e){
+            e.preventDefault();
+            $('.updateButton').prop('disabled',true);
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('editStudent') }}",
+                type:"POST",
+                data:formData,
+                success:function(data){
+
+                    if(data.success == true){
+                        location.reload();
+
+                    }
+                    else{
+                        alert(data.msg);
+                    }
+
+                }
+            });
+        });
+
     });
 </script>
 

@@ -17,6 +17,7 @@
             <th>Time</th>
             <th>Attempt</th>
             <th>Add Questions</th>
+            <th>Show Questions</th>
             <th>Edit</th>
             <th>Delete</th>
 
@@ -37,8 +38,12 @@
                     data-target="#addQnaModal">Add Questions</a>
             </td>
             <td>
+                <a href="#" class="seeQuestions" data-id="{{ $exam->id }}" data-toggle="modal"
+                    data-target="#seeQnaModal">See Questions</a>
+            </td>
+            <td>
                 <button class="btn btn-info editButton" data-id="{{ $exam->id }}" data-toggle="modal"
-                    data-target="#editExamModel">Edit</button>
+                    data-target="#editExamModal">Edit</button>
             </td>
             <td>
                 <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-toggle="modal"
@@ -190,8 +195,9 @@
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="exam_id" id="addExamId">
-                    <input type="search" name="search" class="w-100" placeholder="Search Here">
-                    <table class="table">
+                    <input type="search" name="search" id="search" onkeyup="searchTable()" class="w-100"
+                        placeholder="Search Here">
+                    <table class="table" id="questionsTable">
                         <thead>
                             <th>Select</th>
                             <th>Question</th>
@@ -206,6 +212,38 @@
                     <button type="submit" class="btn btn-primary">Add Q & A</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- See AQuestions Modal -->
+<div class="modal fade" id="seeQnaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Questions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <th>S.No</th>
+                        <th>Question</th>
+                    </thead>
+                    <tbody class="seeQuestionTable">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -316,25 +354,26 @@ $(document).ready(function() {
 
         $('#addExamId').val(id);
         $.ajax({
-            url:"{{ route('getQuestions') }}",
-            type:"GET",
-            data:{exam_id:id},
-            success:function(data){
-                if(data.success == true){
+            url: "{{ route('getQuestions') }}",
+            type: "GET",
+            data: {
+                exam_id: id
+            },
+            success: function(data) {
+                if (data.success == true) {
                     var questions = data.data;
                     var html = '';
-                    if(questions.length > 0){
-                        for(let i=0;i<questions.length;i++){
-                            html +=`
+                    if (questions.length > 0) {
+                        for (let i = 0; i < questions.length; i++) {
+                            html += `
                             <tr>
-                                <td><input type="checkbox" value="`+questions[i]['id']+`" name="questions_ids[]"></td>
-                                <td>`+questions[i]['questions']+`</td>
+                                <td><input type="checkbox" value="` + questions[i]['id'] + `" name="questions_ids[]"></td>
+                                <td>` + questions[i]['questions'] + `</td>
                             </tr>
                             `;
                         }
-                    }
-                    else{
-                        html +=`
+                    } else {
+                        html += `
                         <tr>
                         <td colspan="2">Questions not Available!</td>
                         </tr>
@@ -343,8 +382,7 @@ $(document).ready(function() {
                     }
                     $('.addBody').html(html);
 
-                }
-                else{
+                } else {
                     alert(data.msg);
                 }
             }
@@ -352,8 +390,8 @@ $(document).ready(function() {
 
     });
 
-       //add question and answer
-       $("#addQna").submit(function(e) {
+    //add question and answer
+    $("#addQna").submit(function(e) {
         e.preventDefault();
 
         var formData = $(this).serialize();
@@ -372,7 +410,63 @@ $(document).ready(function() {
             }
         });
     });
+
+    //see the questions under exam
+    $('.seeQuestions').click(function() {
+        var id = $(this).attr('data-id');
+
+        $.ajax({
+            url:"{{ route('getExamQuestions') }}",
+            type:"GET",
+            data:{exam_id:id},
+            success:function(data){
+                // console.log(data);
+                var html = '';
+                var questions = data.data;
+                if(questions.length > 0){
+
+                    for(let i = 0; i <questions.length; i++){
+                        html +=`
+                        <tr>
+                            <td>`+(i+1)+`</td>
+                            <td>`+questions[i]['question'][0]['question']+`</td>
+                        </tr>
+                        `;
+                    }
+                }
+                else{
+                    html +=`
+                    <tr>
+                        <td colspan="1">Questions not Available. Please add Questions!</td>
+                    </tr>
+                    `;
+                }
+                $('.seeQuestionTable').html(html);
+            }
+        }); 
+    });
 });
+</script>
+
+<script>
+function searchTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+    table = document.getElementById('questionsTable');
+    tr = table.getElementByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
 </script>
 
 

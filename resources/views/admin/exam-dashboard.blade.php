@@ -16,6 +16,7 @@
             <th>Date</th>
             <th>Time</th>
             <th>Attempt</th>
+            <th>Add Questions</th>
             <th>Edit</th>
             <th>Delete</th>
 
@@ -32,12 +33,16 @@
             <td>{{ $exam->time }} Hrs</td>
             <td>{{ $exam->attempt }} times</td>
             <td>
+                <a href="#" class="addQuestion" data-id="{{ $exam->id }}" data-toggle="modal"
+                    data-target="#addQnaModal">Add Questions</a>
+            </td>
+            <td>
                 <button class="btn btn-info editButton" data-id="{{ $exam->id }}" data-toggle="modal"
                     data-target="#editExamModel">Edit</button>
             </td>
             <td>
                 <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-toggle="modal"
-                    data-target="#deleteExamModel">Delete</button>
+                    data-target="#deleteExamModal">Delete</button>
             </td>
 
         </tr>
@@ -168,6 +173,42 @@
     </div>
 </div>
 
+<!-- Add Answer to exam Modal -->
+<div class="modal fade" id="addQnaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Q & A</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form id="addQna">
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="exam_id" id="addExamId">
+                    <input type="search" name="search" class="w-100" placeholder="Search Here">
+                    <table class="table">
+                        <thead>
+                            <th>Select</th>
+                            <th>Question</th>
+                        </thead>
+                        <tbody class="addBody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Q & A</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -268,7 +309,69 @@ $(document).ready(function() {
         });
     });
 
+    //add questions part
+    $('.addQuestion').click(function() {
 
+        var id = $(this).attr('data-id');
+
+        $('#addExamId').val(id);
+        $.ajax({
+            url:"{{ route('getQuestions') }}",
+            type:"GET",
+            data:{exam_id:id},
+            success:function(data){
+                if(data.success == true){
+                    var questions = data.data;
+                    var html = '';
+                    if(questions.length > 0){
+                        for(let i=0;i<questions.length;i++){
+                            html +=`
+                            <tr>
+                                <td><input type="checkbox" value="`+questions[i]['id']+`" name="questions_ids[]"></td>
+                                <td>`+questions[i]['questions']+`</td>
+                            </tr>
+                            `;
+                        }
+                    }
+                    else{
+                        html +=`
+                        <tr>
+                        <td colspan="2">Questions not Available!</td>
+                        </tr>
+                        `;
+
+                    }
+                    $('.addBody').html(html);
+
+                }
+                else{
+                    alert(data.msg);
+                }
+            }
+        });
+
+    });
+
+       //add question and answer
+       $("#addQna").submit(function(e) {
+        e.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: "{{ route( 'addQuestions' )}}",
+            type: "POST",
+            data: formData,
+            success: function(data) {
+                if (data.success == true) {
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+
+            }
+        });
+    });
 });
 </script>
 

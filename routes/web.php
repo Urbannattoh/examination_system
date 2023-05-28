@@ -68,6 +68,10 @@ Route::group(['middleware'=>['web','checkAdmin']], function(){
     Route::post('/edit-student',[AdminController::class,'editStudent'])->name('editStudent');
     Route::post('/delete-student',[AdminController::class,'deleteStudent'])->name('deleteStudent');
 
+    //question and answer and exams routing
+    Route::get('/get-questions',[AdminController::class,'getQuestions'])->name('getQuestions');
+    Route::post('/add-questions',[AdminController::class,'addQuestions'])->name('addQuestions');
+
 });
 
     Route::group(['middleware'=>['web','checkStudent']], function(){

@@ -388,4 +388,17 @@ public function qnaDashboard(){
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
     }
+    public function deleteExamQuestions(Request $request)
+    {
+        try{
+            QnaExam::where('id',$request->id)->delete();
+            return response()->json(['success'=>true,'msg'=>'Questions Deleted']);
+
+        }catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+
 }

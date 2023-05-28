@@ -43,7 +43,7 @@
             </td>
             <td>
                 <button class="btn btn-info editButton" data-id="{{ $exam->id }}" data-toggle="modal"
-                    data-target="#editExamModal">Edit</button>
+                    data-target="#editExamModel">Edit</button>
             </td>
             <td>
                 <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-toggle="modal"
@@ -235,6 +235,7 @@
                     <thead>
                         <th>S.No</th>
                         <th>Question</th>
+                        <th>Delete</th>
                     </thead>
                     <tbody class="seeQuestionTable">
 
@@ -430,6 +431,10 @@ $(document).ready(function() {
                         <tr>
                             <td>`+(i+1)+`</td>
                             <td>`+questions[i]['question'][0]['question']+`</td>
+                            <td>
+                                <button class="btn btn-danger deleteQuestion" data-id="`+questions[i]['id']+`">Delete</button>
+                            </td>
+
                         </tr>
                         `;
                     }
@@ -444,6 +449,24 @@ $(document).ready(function() {
                 $('.seeQuestionTable').html(html);
             }
         }); 
+    });
+
+    //delete questions under the see questions table
+    $(document).on('click','.deleteQuestion',function(){
+        var id = $(this).attr('data-id');
+        var obj = $(this);
+        $.ajax({
+            url:"{{ route('deleteExamQuestions') }}",
+            type:"GET",
+            data:{id:id},
+            success:function(data){
+                if(data.success == true){
+                    obj.parent().parent().remove();
+                }else{
+                    alert(alert.msg);
+                }
+            }
+        })
     });
 });
 </script>

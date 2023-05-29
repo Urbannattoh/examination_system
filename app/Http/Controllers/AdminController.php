@@ -63,6 +63,7 @@ class AdminController extends Controller
     //exam dashboard load
     public function examDashboard()
     {
+        
         $subjects = Subject::all();
         $exams = Exam::with('subjects')->get();
         return view('admin.exam-dashboard',['subjects'=>$subjects,'exams'=>$exams]);
@@ -72,12 +73,14 @@ class AdminController extends Controller
     public function addExam(Request $request)
     {
         try{
+            $unique_id = uniqid('exid');
             Exam::insert([
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'date' => $request->date,
                 'time' => $request->time,
-                'attempt' => $request->attempt
+                'attempt' => $request->attempt,
+                'enterance_id' =>$unique_id
 
             ]);
            return response()->json(['success'=>true,'msg'=>'Exam added successfully!']);

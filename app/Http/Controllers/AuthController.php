@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Exam;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Hash;
 
@@ -84,9 +85,11 @@ class AuthController extends Controller
             return back()->with('error','Username and Password is incorrect');
         }
      }
+
      public function loadDashboard()
      {
-        return view('student.dashboard');
+        $exams = Exam::with('subjects')->orderBy('date')->get();
+        return view('student.dashboard',['exams'=>$exams]);
      }
 
      public function adminDashboard()

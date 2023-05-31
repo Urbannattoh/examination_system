@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\examController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,8 @@ Route::group(['middleware'=>['web','checkAdmin']], function(){
 
     Route::group(['middleware'=>['web','checkStudent']], function(){
     Route::get('/dashboard', [AuthController::class,'loadDashboard']); 
+    Route::get('/exam/{id}', [examController::class,'loadExamDashboard']); 
+
 });
 
 

@@ -81,6 +81,8 @@ Route::group(['middleware'=>['web','checkAdmin']], function(){
     Route::get('/dashboard', [AuthController::class,'loadDashboard']); 
     Route::get('/exam/{id}', [examController::class,'loadExamDashboard']); 
 
+
+    Route::post('/exam-submit',[ExamController::class,'examSubmit'])->name('examSubmit');
 });
 
 

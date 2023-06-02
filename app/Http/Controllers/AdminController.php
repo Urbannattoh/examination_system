@@ -403,5 +403,8 @@ public function qnaDashboard(){
         }
     }
 
-
+    public function loadMarks(){
+        $exams = Exam::with('getQnaExam')->get();
+        return view('admin.marksDashboard', compact('exams'));
+    }
 }

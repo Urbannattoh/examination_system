@@ -74,7 +74,10 @@ Route::group(['middleware'=>['web','checkAdmin']], function(){
     Route::post('/add-questions',[AdminController::class,'addQuestions'])->name('addQuestions');
     Route::get('/get-exam-questions',[AdminController::class,'getExamQuestions'])->name('getExamQuestions');
     Route::get('/delete-exam-questions',[AdminController::class,'deleteExamQuestions'])->name('deleteExamQuestions');
-   
+    
+    
+    //exam marks routing
+    Route::get('/admin/marks',[AdminController::class,'loadMarks']);
 });
 
     Route::group(['middleware'=>['web','checkStudent']], function(){

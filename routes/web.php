@@ -78,6 +78,14 @@ Route::group(['middleware'=>['web','checkAdmin']], function(){
     
     //exam marks routing
     Route::get('/admin/marks',[AdminController::class,'loadMarks']);
+    Route::post('/update-marks',[AdminController::class,'updateMarks'])->name('updateMarks');
+
+    // exams review routing
+    Route::get('/admin/review-exams',[AdminController::class,'reviewExams'])->name('reviewExams');
+    Route::get('/get-reviewed-qna',[AdminController::class,'reviewQna'])->name('reviewQna');
+
+
+
 });
 
     Route::group(['middleware'=>['web','checkStudent']], function(){

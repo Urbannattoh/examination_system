@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
+use App\Models\ExamAttempt;
 use App\Models\User;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\QnaExam;
+use App\Models\ExamAnswer;
+
 
 use Illuminate\Support\Facades\Hash;
 use Mail;
@@ -407,4 +410,41 @@ public function qnaDashboard(){
         $exams = Exam::with('getQnaExam')->get();
         return view('admin.marksDashboard', compact('exams'));
     }
+    
+    public function updateMarks(Request $request)
+    {
+        try{
+
+            Exam::where('id',$request->exam_id)->update([
+                'marks' => $request->marks
+            ]);
+            return response()->json(['success'=>true,'msg'=>'Marks Updated!']);
+
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function reviewExams(){
+
+        $attempts = ExamAttempt::with(['user','exam'])->orderBy('id')->get();
+       
+        return view('admin.review-exams',compact('attempts'));
+    }
+
+    public function reviewQna(Request $request)
+    {
+        try {
+       $attemptData = ExamAnswer::where('attempt_id',$request->attempt_id)->with(['question','answers'])->get();
+       return response()->json(['success'=>true,'data'=>$attemptData]);
+        
+        }
+        catch(\Exception $e)
+       {
+           return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+       }
+    }
+
 }

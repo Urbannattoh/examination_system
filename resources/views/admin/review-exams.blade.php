@@ -62,12 +62,14 @@
                 </button>
             </div>
             <form id="reviewForm">
+                @csrf
+                <input type="hidden" name="attempt_id" id="attempt_id">
                 <div class="modal-body review-exam">
                     Loading...
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Approved</button>
+                    <button type="submit" class="btn btn-primary approved-btn">Approve</button>
                 </div>
             </form>
         </div>
@@ -78,6 +80,8 @@
 $(document).ready(function() {
     $('.reviewExam').click(function() {
         var id = $(this).attr('data-id');
+
+        $('#attempt_id').val(id);
 
         $.ajax({
             url: "{{ route('reviewQna')}}",
@@ -124,6 +128,28 @@ $(document).ready(function() {
             }
         })
 
+    });
+
+    //approving the exams
+    $('#reviewForm').submit(function(event){
+        event.preventDefault();
+
+        $('.approved-btn').html('please wait <i class="fa fa-spinner fa-spin"></i> ')
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url:"{{ route('approvedQna') }}",
+            type:"POST",
+            data:formData,
+            success:function(data){
+                if (data.success == true) {
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        })
     });
 });
 </script>

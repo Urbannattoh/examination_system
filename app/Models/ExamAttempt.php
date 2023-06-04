@@ -22,7 +22,7 @@ class ExamAttempt extends Model
 
     public function exam()
     {
-        return $this->hasOne(User::class,'id','exam_id');
+        return $this->hasOne(Exam::class,'id','exam_id');
     }
     
    

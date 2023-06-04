@@ -416,7 +416,8 @@ public function qnaDashboard(){
         try{
 
             Exam::where('id',$request->exam_id)->update([
-                'marks' => $request->marks
+                'marks' => $request->marks,
+                'pass_marks' => $request->pass_marks
             ]);
             return response()->json(['success'=>true,'msg'=>'Marks Updated!']);
 
@@ -445,6 +446,52 @@ public function qnaDashboard(){
        {
            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
        }
+    }
+
+    public function approvedQna(Request $request)
+    {
+        try {
+            
+            $attemptId = $request->attempt_id;
+
+            $examData = ExamAttempt::where('id',$attemptId)->with(['user','exam'])->get();
+            $marks = $examData[0]['exam']['marks'];
+
+            $attemptData = ExamAnswer::where('attempt_id',$attemptId)->with('answers')->get();
+
+            $totalMarks = 0;
+            
+            if (count($attemptData) > 0) {
+                foreach($attemptData as $attempt){
+                    if($attempt->answers->is_correct == 1){
+                        $totalMarks+=$marks; 
+                    }
+                }
+            }
+            ExamAttempt::where('id',$attemptId)->update([
+                'status' => 1,
+                'marks' => $totalMarks
+            ]);
+
+            $url = URL::to('/');
+            $data['url'] = $url.'/results';
+            $data['name'] = $examData[0]['user']['name'];
+            $data['email'] = $examData[0]['user']['email'];
+            $data['exam_name'] = $examData[0]['exam']['exam_name'];
+            $data['title'] = $examData[0]['exam']['exam_name'].'Result';
+            
+
+            Mail::send('result-mail',['data' => $data], function($message) use($data) {
+                $message->to($data['email'])->subject($data['title']);
+            });
+
+            return response()->json(['success'=>true,'msg'=>'Exam Approved Successfully!']);
+             
+             }
+             catch(\Exception $e)
+            {
+                return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            }
     }
 
 }

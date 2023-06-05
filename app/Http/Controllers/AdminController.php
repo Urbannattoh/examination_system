@@ -148,9 +148,18 @@ public function qnaDashboard(){
     public function addQna(Request $request)
     {
         try{
+            $explanation = null;
+            if (isset($request->explanation)) 
+            {
+             $explanation = $request->explanation;
+            }
+
             $questionId=Question::insertGetId([
-            'question' => $request->question
+            'question' => $request->question,
+            'explanation' => $explanation
+
             ]);
+
             foreach($request->answers as $answer){
                 $is_correct = 0;
                 if($request->is_correct == $answer){
@@ -185,8 +194,14 @@ public function qnaDashboard(){
     public function updateQna(Request $request)
     {
         try{
+            $explanation = null;
+            if (isset($request->explanation)) 
+                {
+                $explanation = $request->explanation;
+                }
             Question::where('id',$request->question_id)->update([
-                'question' =>$request->question
+                'question' =>$request->question,
+                'explanation' => $explanation
             ]);
 
             //old answer update

@@ -8,6 +8,7 @@
 
 <div class="container">
     <p style="color:black;">Welcome, {{ Auth::user()->name }}</p>
+   
     <h1 class="text-center"> {{ $exam[0]['exam_name'] }} </h1>
     @php $qcount = 1;@endphp
 

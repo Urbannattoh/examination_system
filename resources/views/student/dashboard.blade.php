@@ -1,6 +1,8 @@
 @extends ('layout/student-layout')
 @section('space-work')
 <h2>Exams</h2>
+<h6>(Please copy the link in a new tab to start the Exam)</h6>
+
 <table class="table">
     <thead>
    
@@ -10,7 +12,7 @@
     <th>Date</th>
     <th>Time</th>
     <th>Total Attempts</th>
-    <th>Available Attempt</th>
+    <th>Attempted Times</th>
     <th>Copy link</th>
     </thead>
 

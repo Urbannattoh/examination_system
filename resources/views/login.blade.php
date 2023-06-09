@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-5">
-                    <h2 class="heading-section">EXAMINATION SYSTEM</h2>
+                    <h2 class="heading-section">PTI EXAMINATION SYSTEM</h2>
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -52,7 +52,7 @@
                                     </label>
                                 </div>
                                 <div class="w-50 text-md-right">
-                                    <a href="/forget-password" style="color: #fff">Forgot Password</a>
+                                    <a href="/register" style="color: #fff">Register</a>
                                 </div>
                             </div>
                         </form>

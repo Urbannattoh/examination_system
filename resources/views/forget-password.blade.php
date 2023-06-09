@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-5">
-                    <h2 class="heading-section">ONLINE EXAMINATION SYSTEM</h2>
+                    <h2 class="heading-section">PTI EXAMINATION SYSTEM</h2>
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -36,6 +36,7 @@
                                 <button type="submit" class="form-control btn btn-primary submit px-3">Forget Password</button>
                             </div>
                         </form>
+                        
                         <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
                         <div class="social d-flex text-center">
                                 

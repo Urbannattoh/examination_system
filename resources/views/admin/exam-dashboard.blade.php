@@ -472,7 +472,8 @@ $(document).ready(function() {
 </script>
 
 <script>
-function searchTable() {
+function searchTable() 
+    {
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById('search');
     filter = input.value.toUpperCase();
